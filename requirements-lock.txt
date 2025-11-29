@@ -16,9 +16,9 @@ ipython==8.21.0
 jupyterlab==4.1.0
 
 # SSM
-packaging==23.2
-mamba-ssm==1.2.0.post1
-causal_conv1d==1.2.0.post1
+# packaging==23.2
+# mamba-ssm==1.2.0.post1
+# causal_conv1d==1.2.0.post1
 
 tqdm==4.66.2
 black==24.2.0
