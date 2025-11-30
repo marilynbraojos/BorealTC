@@ -10,6 +10,6 @@
 #SBATCH --mail-type=ALL                                                                                                                             # Mail preferences
 #SBATCH --mail-user=mgutierrez64@gatech.edu                                                                                                         # Email address
 
-cd $SLURM_SUBMIT_DIR
 source /storage/home/hcoda1/0/mgutierrez64/p-elightsey3-0/terrain_classification/BorealTC/.venv/bin/activate
+cd /storage/home/hcoda1/0/mgutierrez64/p-elightsey3-0/terrain_classification/BorealTC
 srun python /storage/home/hcoda1/0/mgutierrez64/p-elightsey3-0/terrain_classification/BorealTC/cnn_train.py
