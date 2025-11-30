@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
-#SBATCH --time=4-00:00
+#SBATCH --time=4-00:00 
 #SBATCH --job-name=TerrainCNNHusky
 #SBATCH --output=%x-%j.out
 
