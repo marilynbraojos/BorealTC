@@ -35,12 +35,12 @@ from utils.augmentations import (
     SpectralNoise,
 )
 from utils.constants import ch_cols, imu_dim, pro_dim
-# from utils.datamodule import (
-#     MCSDataModule,
-#     TemporalDataModule,
-#     MambaDataModule,
-#     MambaDataModuleCombined,
-# )
+from utils.datamodule import (
+    MCSDataModule,
+    TemporalDataModule,
+    # MambaDataModule,
+    # MambaDataModuleCombined,
+)
 
 # from mamba_ssm.models.mixer_seq_simple import create_block
 
