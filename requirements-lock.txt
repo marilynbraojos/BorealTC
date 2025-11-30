@@ -10,11 +10,10 @@ torchvision==0.17.0
 scikit-learn==1.4.0
 tqdm==4.66.2
 pyarrow==15.0.0
-
+tensorboard==2.15.2
 
 # matplotlib==3.8.2
 # plotly==5.20.0
-# tensorboard==2.15.2
 # ipython==8.21.0
 # jupyterlab==4.1.0
 # SSM
