@@ -1,6 +1,6 @@
 {
   "model_name": "FineTuned_EDL_1DCNN",
-  "timestamp": "2026-11-17 03:53:21",
+  "timestamp": "2026-11-17 04:04:44",
   "device": "cpu",
   "input_shape": [
     1,
@@ -24,20 +24,20 @@
     "gflops_per_window": 0.002624
   },
   "latency_metrics": {
-    "mean_latency_ms": 0.2194,
-    "median_latency_p50_ms": 0.213,
-    "std_latency_ms": 0.0216,
-    "p90_latency_ms": 0.246,
-    "p95_latency_ms": 0.2584,
-    "p99_latency_ms": 0.2944,
-    "min_latency_ms": 0.185,
-    "max_latency_ms": 0.3378,
-    "throughput_windows_per_sec": 4557.04,
+    "mean_latency_ms": 0.2189,
+    "median_latency_p50_ms": 0.217,
+    "std_latency_ms": 0.0227,
+    "p90_latency_ms": 0.2466,
+    "p95_latency_ms": 0.2588,
+    "p99_latency_ms": 0.2967,
+    "min_latency_ms": 0.1825,
+    "max_latency_ms": 0.3721,
+    "throughput_windows_per_sec": 4567.55,
     "real_time_factor_rtf": 0.000219,
-    "real_time_speedup": 4557.0
+    "real_time_speedup": 4567.5
   },
   "memory_footprint": {
-    "peak_ram_mb": 0.0023,
+    "peak_ram_mb": 0.0019,
     "peak_vram_mb": 0.0
   }
 }

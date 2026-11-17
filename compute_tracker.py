@@ -56,38 +56,52 @@ def estimate_model_macs(
     input_shape: Tuple[int, int, int] = (1, 10, 100),
 ) -> Tuple[int, int]:
     """
-    Computes exact MACs and FLOPs for the Evidential 1D CNN architecture
-    with input shape (batch_size, in_channels, seq_len).
-    1 MAC is approximately 2 FLOPs (1 multiply + 1 accumulate).
+    Dynamically computes exact MACs and FLOPs for any 1D CNN or Deep Ensemble
+    using forward hooks across all Conv1d and Linear layers.
+    1 MAC = 2 FLOPs (1 multiply + 1 accumulate).
     """
-    b, c, t = input_shape
-    total_macs = 0
+    device = next(model.parameters()).device
+    macs_list = []
 
-    # Layer 1: Conv1d(10, 32, kernel=5, pad=2) -> t=100
-    macs_conv1 = estimate_conv1d_macs(10, 32, 5, 100)
-    # MaxPool1d(2) -> t=50
+    def conv1d_hook(module: nn.Conv1d, inp, out):
+        batch_size, out_channels, out_len = out.shape
+        kernel_ops = module.in_channels * module.kernel_size[0] // module.groups
+        macs = batch_size * out_channels * out_len * kernel_ops
+        macs_list.append(macs)
 
-    # Layer 2: Conv1d(32, 64, kernel=5, pad=2) -> t=50
-    macs_conv2 = estimate_conv1d_macs(32, 64, 5, 50)
-    # MaxPool1d(2) -> t=25
+    def linear_hook(module: nn.Linear, inp, out):
+        batch_size = out.shape[0]
+        macs = batch_size * module.in_features * module.out_features
+        macs_list.append(macs)
 
-    # Layer 3: Conv1d(64, 128, kernel=3, pad=1) -> t=25
-    macs_conv3 = estimate_conv1d_macs(64, 128, 3, 25)
-    # AdaptiveAvgPool1d(1) -> 128
+    hooks = []
+    for m in model.modules():
+        if isinstance(m, nn.Conv1d):
+            hooks.append(m.register_forward_hook(conv1d_hook))
+        elif isinstance(m, nn.Linear):
+            hooks.append(m.register_forward_hook(linear_hook))
 
-    # FC 1: Linear(128, 64)
-    macs_fc1 = 128 * 64
+    was_training = model.training
+    model.eval()
+    with torch.no_grad():
+        dummy = torch.randn(input_shape, device=device)
+        _ = model(dummy)
 
-    # FC 2: Linear(64, 5)
-    macs_fc2 = 64 * 5
+    for h in hooks:
+        h.remove()
 
-    # Density Support Gate (if present: mahalanobis distance (128x128 matrix))
-    macs_gate = 128 * 128 + 128 * 5
+    if was_training:
+        model.train()
 
-    total_macs = b * (macs_conv1 + macs_conv2 + macs_conv3 + macs_fc1 + macs_fc2 + macs_gate)
+    total_macs = sum(macs_list)
+
+    # Account for Mahalanobis density gate if initialized
+    if hasattr(model, "density_initialized") and bool(model.density_initialized.item()):
+        b = input_shape[0]
+        total_macs += b * (128 * 128 + 128 * 5)
+
     total_flops = 2 * total_macs
-
-    return total_macs, total_flops
+    return int(total_macs), int(total_flops)
 
 
 def profile_latency_and_throughput(
