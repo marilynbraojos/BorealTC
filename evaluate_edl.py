@@ -268,6 +268,12 @@ def evaluate(
     except Exception as e:
         print(f"\nCould not generate matplotlib figure: {e}")
 
+    # 9. Automatic Compute & Latency Benchmarking
+    from compute_tracker import ComputeTracker
+    tracker = ComputeTracker(model_name="Baseline_EDL_1DCNN")
+    compute_record = tracker.benchmark_model(model, device=device)
+    tracker.print_summary(compute_record)
+
     print("\n" + "=" * 75)
     print("  Evaluation finished successfully.")
     print("=" * 75)

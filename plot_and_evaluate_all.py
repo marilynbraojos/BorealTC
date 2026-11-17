@@ -267,6 +267,12 @@ def main():
 
     print("=" * 80)
 
+    # 6. Automatic Compute & Latency Benchmarking
+    from compute_tracker import ComputeTracker
+    tracker = ComputeTracker(model_name="FineTuned_EDL_1DCNN")
+    compute_record = tracker.benchmark_model(model, device=device)
+    tracker.print_summary(compute_record)
+
 
 if __name__ == "__main__":
     main()

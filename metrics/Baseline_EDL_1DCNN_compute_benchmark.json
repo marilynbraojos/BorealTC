@@ -1,0 +1,43 @@
+{
+  "model_name": "Baseline_EDL_1DCNN",
+  "timestamp": "2026-11-17 03:53:30",
+  "device": "cpu",
+  "input_shape": [
+    1,
+    10,
+    100
+  ],
+  "window_duration_sec": 1.0,
+  "parameters": {
+    "total_parameters": 45669,
+    "trainable_parameters": 45669,
+    "non_trainable_parameters": 0,
+    "buffer_elements": 451,
+    "model_size_kb": 180.16,
+    "model_size_mb": 0.1759
+  },
+  "computational_complexity": {
+    "macs_per_window": 1311936,
+    "macs_m": 1.3119,
+    "flops_per_window": 2623872,
+    "mflops_per_window": 2.6239,
+    "gflops_per_window": 0.002624
+  },
+  "latency_metrics": {
+    "mean_latency_ms": 0.1889,
+    "median_latency_p50_ms": 0.188,
+    "std_latency_ms": 0.022,
+    "p90_latency_ms": 0.2116,
+    "p95_latency_ms": 0.2175,
+    "p99_latency_ms": 0.2321,
+    "min_latency_ms": 0.1467,
+    "max_latency_ms": 0.4048,
+    "throughput_windows_per_sec": 5293.54,
+    "real_time_factor_rtf": 0.000189,
+    "real_time_speedup": 5293.5
+  },
+  "memory_footprint": {
+    "peak_ram_mb": 0.0023,
+    "peak_vram_mb": 0.0
+  }
+}
