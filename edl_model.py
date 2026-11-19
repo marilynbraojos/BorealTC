@@ -78,13 +78,11 @@ class FineTunedEvidentialClassifier1D(nn.Module):
         in_channels: int = 10,
         num_classes: int = 5,
         hidden_dim: int = 64,
-        dist_center: float = 380.0,
-        dist_scale: float = 0.02,
+        dist_center: float = 120.0,
+        dist_scale: float = 0.04,
     ):
         super().__init__()
         self.num_classes = num_classes
-        self.dist_center = dist_center
-        self.dist_scale = dist_scale
 
         if base_model is not None:
             self.features = base_model.features
@@ -94,16 +92,24 @@ class FineTunedEvidentialClassifier1D(nn.Module):
             self.features = base.features
             self.classifier = base.classifier
 
-        # Buffer for class prototype means and inverse covariance in feature space
+        # Buffers for class prototype means, inverse covariance, and calibrated gate parameters
         self.register_buffer("means", torch.zeros(num_classes, 128))
         self.register_buffer("inv_cov", torch.eye(128))
+        self.register_buffer("dist_center", torch.tensor(float(dist_center)))
+        self.register_buffer("dist_scale", torch.tensor(float(dist_scale)))
         self.register_buffer("density_initialized", torch.tensor(False))
 
-    def set_density_parameters(self, means: torch.Tensor, inv_cov: torch.Tensor, dist_center: float = 380.0, dist_scale: float = 0.02):
+    def set_density_parameters(
+        self,
+        means: torch.Tensor,
+        inv_cov: torch.Tensor,
+        dist_center: float = 120.0,
+        dist_scale: float = 0.04,
+    ):
         self.means.copy_(means)
         self.inv_cov.copy_(inv_cov)
-        self.dist_center = dist_center
-        self.dist_scale = dist_scale
+        self.dist_center.fill_(float(dist_center))
+        self.dist_scale.fill_(float(dist_scale))
         self.density_initialized.fill_(True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

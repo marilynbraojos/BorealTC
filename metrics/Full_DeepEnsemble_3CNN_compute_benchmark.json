@@ -1,0 +1,43 @@
+{
+  "model_name": "Full_DeepEnsemble_3CNN",
+  "timestamp": "2026-11-19 04:01:48",
+  "device": "cpu",
+  "input_shape": [
+    1,
+    10,
+    100
+  ],
+  "window_duration_sec": 1.0,
+  "parameters": {
+    "total_parameters": 137007,
+    "trainable_parameters": 137007,
+    "non_trainable_parameters": 0,
+    "buffer_elements": 1354,
+    "model_size_kb": 540.47,
+    "model_size_mb": 0.5278
+  },
+  "computational_complexity": {
+    "macs_per_window": 3884736,
+    "macs_m": 3.8847,
+    "flops_per_window": 7769472,
+    "mflops_per_window": 7.7695,
+    "gflops_per_window": 0.007769
+  },
+  "latency_metrics": {
+    "mean_latency_ms": 0.8212,
+    "median_latency_p50_ms": 0.8178,
+    "std_latency_ms": 0.0842,
+    "p90_latency_ms": 0.8468,
+    "p95_latency_ms": 0.8575,
+    "p99_latency_ms": 0.9794,
+    "min_latency_ms": 0.7358,
+    "max_latency_ms": 2.0921,
+    "throughput_windows_per_sec": 1217.8,
+    "real_time_factor_rtf": 0.000821,
+    "real_time_speedup": 1217.8
+  },
+  "memory_footprint": {
+    "peak_ram_mb": 0.0026,
+    "peak_vram_mb": 0.0
+  }
+}
