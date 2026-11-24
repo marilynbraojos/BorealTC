@@ -14,6 +14,15 @@ CHANNELS = [
 
 DEFAULT_TERRAINS = ["asphalt", "flooring", "ice", "sandy_loam", "snow"]
 
+# Exact 10 compact runs (2 per terrain) used in the 427-window Minimum Viable Product (MVP)
+MVP_RUNS = {
+    "asphalt": ["00", "02"],
+    "flooring": ["01", "02"],
+    "ice": ["04", "07"],
+    "sandy_loam": ["00", "09"],
+    "snow": ["00", "04"],
+}
+
 
 def align_imu_and_pro(imu_df: pd.DataFrame, pro_df: pd.DataFrame) -> pd.DataFrame:
     """Aligns IMU (100 Hz) and proprioceptive (~6.5 Hz) data onto a common 100 Hz time grid."""
@@ -48,6 +57,7 @@ class HuskyDataset(Dataset):
         step_size: int = 50,    # 50 steps @ 100Hz = 0.5 second stride (50% overlap)
         channels_first: bool = False,  # If True, shape is (C, T), else (T, C)
         max_runs_per_terrain: Optional[int] = None,
+        allowed_runs_per_terrain: Optional[dict] = None,
     ):
         super().__init__()
         self.data_dir = Path(data_dir)
@@ -75,7 +85,10 @@ class HuskyDataset(Dataset):
                 continue
             terrain_dir = dir_lookup[terrain]
             imu_files = sorted(terrain_dir.glob("imu_*.csv"))
-            if max_runs_per_terrain:
+            if allowed_runs_per_terrain and terrain in allowed_runs_per_terrain:
+                allowed_set = set(allowed_runs_per_terrain[terrain])
+                imu_files = [f for f in imu_files if f.stem.split("_")[1] in allowed_set]
+            elif max_runs_per_terrain:
                 imu_files = imu_files[:max_runs_per_terrain]
 
             self.runs_summary[terrain] = len(imu_files)
